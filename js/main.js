@@ -148,7 +148,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const galleryCards = Array.from(document.querySelectorAll("#worksGalleryGrid .work-trigger"));
   const galleryItems = galleryCards.map((card) => ({
     src: card.dataset.img,
-    title: card.dataset.title || "مشروع من أعمال السلطان"
+    title: card.dataset.title || "مشروع من أعمال أبو سلطان"
   }));
 
   let currentLightboxIdx = 0;
@@ -173,8 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
         renderLightboxSlide(matchedIndex);
       } else {
         lightboxImg.src = src;
-        lightboxImg.alt = title || "معاينة عمل السلطان";
-        lightboxCaptionTitle.textContent = title || "أعمال مؤسسة السلطان";
+        lightboxImg.alt = title || "معاينة عمل أبو سلطان";
+        lightboxCaptionTitle.textContent = title || "أعمال مؤسسة أبو سلطان";
         lightboxCounter.textContent = "معاينة المشروع";
       }
     }
@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const msg = document.getElementById("cfMessage").value.trim() || "طلب معاينة ورفع مقاسات مجاني";
 
       lastRequestPayload =
-        `السلام عليكم مؤسسة السلطان،\n` +
+        `السلام عليكم مؤسسة أبو سلطان،\n` +
         `طلب معاينة وتسعيرة جديدة:\n` +
         `• الاسم: ${name}\n` +
         `• الجوال: ${phone}\n` +
@@ -440,3 +440,18 @@ document.addEventListener("DOMContentLoaded", () => {
     yearEl.textContent = String(new Date().getFullYear());
   }
 });
+// reviews form
+(function(){
+  const form=document.getElementById("reviewForm"); if(!form) return;
+  const picker=document.getElementById("starPicker"); let rating=5;
+  const paint=()=>picker.querySelectorAll("button").forEach(b=>b.classList.toggle("on",+b.dataset.v<=rating));
+  picker.addEventListener("click",e=>{const b=e.target.closest("button");if(b){rating=+b.dataset.v;paint();}});
+  paint();
+  form.addEventListener("submit",e=>{
+    e.preventDefault();
+    const name=document.getElementById("reviewName").value.trim();
+    if(!name){document.getElementById("reviewName").focus();return;}
+    const msg="تقييم جديد لأبو سلطان\n"+"الاسم: "+name+"\nالخدمة: "+document.getElementById("reviewService").value+"\nالتقييم: "+"★".repeat(rating)+"☆".repeat(5-rating)+"\nالرأي: "+document.getElementById("reviewText").value.trim();
+    window.open("https://wa.me/"+PRIMARY_WA_INTL+"?text="+encodeURIComponent(msg),"_blank","noopener");
+  });
+})();
