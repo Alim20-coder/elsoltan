@@ -2787,6 +2787,8 @@ button:disabled {
 
   .site-header .header-actions {
     margin-inline-start: auto;
+    /* push the call button away from the left edge so it is fully visible */
+    margin-inline-end: 0.9rem;
     flex: 0 0 auto;
   }
 
@@ -3136,6 +3138,10 @@ button:disabled {
     font-size: 0.78rem;
     gap: 0.4rem;
     border-radius: 9px;
+  }
+
+  .site-header .header-actions {
+    margin-inline-end: 0.65rem;
   }
 }
 
