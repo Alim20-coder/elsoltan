@@ -272,33 +272,116 @@ img {
   border-width: 1.5px;
 }
 
+/* =====================================================================
+   Desktop header (>= 992px)
+   The nav area is allowed to shrink (flex: 1 1 0 + min-width: 0), so the
+   action buttons at the end of the header can never be pushed off-screen.
+   ===================================================================== */
 @media (min-width: 992px) {
   #desktopNavCollapse {
     display: flex !important;
-    flex-basis: auto;
-    flex-grow: 1;
-    justify-content: center;
-    padding-inline: 1rem;
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: flex-start !important;
+    padding: 8px 1rem;
+    margin-block: -8px;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
-}
 
-@media (min-width: 992px) and (max-width: 1280px) {
-  .brand-subtitle {
+  #desktopNavCollapse::-webkit-scrollbar {
     display: none;
   }
 
+  /* auto margins center the links, and fall back to start-aligned
+     (scrollable) when there is not enough room */
   #desktopNavLinks {
-    gap: 0.1rem;
+    margin-inline: auto;
+  }
+}
+
+/* 992 - 1599: no room for the brand subtitle next to the nav links */
+@media (min-width: 992px) and (max-width: 1599.98px) {
+  .brand-subtitle {
+    display: none;
+  }
+}
+
+/* 992 - 1399: hide the WhatsApp header button (the floating dock has it) */
+@media (min-width: 992px) and (max-width: 1399.98px) {
+  .site-header .header-actions .btn-sultan-whatsapp {
+    display: none !important;
+  }
+}
+
+/* 1200 - 1599 */
+@media (min-width: 1200px) and (max-width: 1599.98px) {
+  #desktopNavLinks {
+    gap: 0.15rem;
   }
 
   #desktopNavLinks .nav-link {
-    font-size: 0.82rem;
-    padding: 0.38rem 0.5rem;
+    font-size: 0.84rem;
+    padding: 0.4rem 0.55rem;
   }
 
   .site-header .header-action-btn {
-    padding: 0.36rem 0.72rem;
-    font-size: 0.78rem;
+    padding: 0.38rem 0.78rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* 992 - 1199 (tablets in landscape, small laptops) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .site-header .navbar {
+    gap: 0.5rem;
+  }
+
+  .brand-lockup {
+    gap: 0.5rem;
+  }
+
+  .brand-emblem {
+    width: 36px;
+    height: 36px;
+  }
+
+  .brand-title {
+    font-size: 1.05rem;
+  }
+
+  #desktopNavCollapse {
+    padding-inline: 0.5rem;
+  }
+
+  #desktopNavLinks {
+    gap: 0;
+  }
+
+  #desktopNavLinks .nav-link {
+    font-size: 0.8rem;
+    padding: 0.35rem 0.42rem;
+  }
+
+  .site-header .header-action-btn {
+    padding: 0.4rem 0.72rem;
+    font-size: 0.8rem;
+  }
+
+  /* top utility bar: keep the phone numbers fully visible */
+  .utility-info-group {
+    gap: 1rem !important;
+    min-width: 0;
+  }
+
+  .utility-info-group > span:nth-child(2) {
+    display: none;
+  }
+
+  .utility-phones {
+    gap: 0.5rem !important;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 }
 
@@ -2673,6 +2756,17 @@ button:disabled {
   transform: translateY(0);
 }
 
+/* =====================================================================
+   Responsive
+   ===================================================================== */
+
+/* very large screens */
+@media (min-width: 1700px) {
+  .container {
+    max-width: 1440px;
+  }
+}
+
 @media (max-width: 1199.98px) {
   .workflow-grid {
     grid-template-columns: repeat(3, 1fr);
@@ -2683,13 +2777,39 @@ button:disabled {
   }
 }
 
+/* ---------- tablets and phones (< 992px) ---------- */
 @media (max-width: 991.98px) {
+  /* header: the brand shrinks, the call button is always fully visible */
   .site-header .navbar {
     flex-wrap: nowrap;
+    gap: 0.5rem;
   }
 
   .site-header .header-actions {
     margin-inline-start: auto;
+    flex: 0 0 auto;
+  }
+
+  .brand-lockup {
+    flex: 0 1 auto;
+    min-width: 0;
+    gap: 0.5rem;
+  }
+
+  .brand-text-wrap {
+    min-width: 0;
+  }
+
+  .brand-title,
+  .brand-subtitle {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .btn-mobile-call {
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
   #desktopNavCollapse {
@@ -2701,7 +2821,9 @@ button:disabled {
     --bs-gutter-x: 1.5rem;
   }
 
-  .hero-photo-float-top { inset-inline-end: 0; }
+  .hero-photo-float-top {
+    inset-inline-end: 0;
+  }
 
   body {
     padding-bottom: 78px;
@@ -2735,6 +2857,7 @@ button:disabled {
   }
 }
 
+/* ---------- large phones / small tablets (< 768px) ---------- */
 @media (max-width: 767.98px) {
   .hero-metrics {
     grid-template-columns: repeat(3, 1fr);
@@ -2755,18 +2878,7 @@ button:disabled {
   }
 
   .workflow-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .works-masonry-grid {
-    grid-template-columns: 1fr;
-    grid-auto-rows: 230px;
-  }
-
-  .work-card-wide,
-  .work-card-tall {
-    grid-column: span 1;
-    grid-row: span 1;
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .tier-radio-group {
@@ -2790,6 +2902,308 @@ button:disabled {
 
   .lightbox-next {
     inset-inline-end: 8px;
+  }
+}
+
+/* ---------- phones (< 576px) ---------- */
+@media (max-width: 575.98px) {
+  /* header */
+  .brand-subtitle {
+    display: none;
+  }
+
+  /* hero */
+  .hero-section {
+    padding-block: 2.5rem 3rem;
+  }
+
+  .hero-badge {
+    font-size: 0.82rem;
+    padding: 0.4rem 0.85rem;
+    border-radius: 16px;
+  }
+
+  .hero-title {
+    font-size: clamp(1.7rem, 8vw, 2.15rem);
+  }
+
+  .hero-lead {
+    font-size: 1rem;
+  }
+
+  .hero-cta-row {
+    gap: 0.65rem;
+  }
+
+  .hero-cta-row .btn-lg-sultan {
+    flex: 1 1 100%;
+    justify-content: center;
+    text-align: center;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .hero-visual-stage {
+    padding: 0.5rem 0.5rem 1rem;
+  }
+
+  .hero-photo-float-top,
+  .hero-photo-float-bottom {
+    width: 38%;
+    border-width: 2px;
+  }
+
+  .hero-photo-float-top {
+    top: -8px;
+  }
+
+  /* sections */
+  .section-header-center {
+    margin-bottom: 2rem;
+  }
+
+  .section-desc {
+    font-size: 1rem;
+  }
+
+  .stat-val {
+    font-size: 1.4rem;
+  }
+
+  .bento-card {
+    padding: 1.25rem;
+    min-height: 240px;
+  }
+
+  /* shades tabs: two per row, evenly sized */
+  .sultan-tabs {
+    gap: 0.5rem;
+  }
+
+  .sultan-tabs .nav-item {
+    flex: 1 1 calc(50% - 0.25rem);
+  }
+
+  .sultan-tabs .nav-link {
+    width: 100%;
+    padding: 0.6rem 0.5rem;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .showcase-panel {
+    padding: 1rem;
+  }
+
+  .showcase-heading {
+    font-size: 1.3rem;
+  }
+
+  .spec-checklist li {
+    align-items: flex-start;
+  }
+
+  .hangar-specs-bar {
+    padding: 0.75rem 0.35rem;
+  }
+
+  .hangar-specs-bar strong {
+    font-size: 1rem;
+  }
+
+  .hangar-specs-bar span {
+    font-size: 0.78rem;
+  }
+
+  .epoxy-option-btn {
+    padding: 0.85rem;
+    gap: 0.75rem;
+  }
+
+  .epoxy-opt-icon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .epoxy-finish-swatch {
+    width: 44px;
+    height: 44px;
+  }
+
+  .workflow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .works-masonry-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 230px;
+  }
+
+  .work-card-wide,
+  .work-card-tall {
+    grid-column: span 1;
+    grid-row: span 1;
+  }
+
+  .warranty-seal {
+    padding: 0.85rem 1rem;
+  }
+
+  .warranty-pill {
+    flex: 1 1 calc(50% - 0.3rem);
+    text-align: center;
+    padding: 0.5rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .package-card {
+    padding: 1.35rem;
+  }
+
+  .num-card strong {
+    font-size: 1.1rem;
+  }
+
+  .map-embed-frame,
+  .map-embed-frame iframe {
+    min-height: 280px;
+  }
+
+  /* footer */
+  .site-footer {
+    padding-top: 3rem;
+  }
+
+  .footer-bottom-bar {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .comma-tech-credit {
+    justify-content: center;
+    border-radius: 18px;
+  }
+
+  /* lightbox */
+  .sultan-lightbox {
+    padding: 0.5rem;
+  }
+
+  .lightbox-dialog {
+    width: 100%;
+    padding: 0.75rem;
+    gap: 0.6rem;
+  }
+
+  .lightbox-img-frame {
+    padding: 0.25rem;
+  }
+
+  .lightbox-footer {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .lightbox-footer .btn-sultan-primary {
+    justify-content: center;
+  }
+}
+
+/* ---------- small phones (< 400px) ---------- */
+@media (max-width: 399.98px) {
+  .brand-lockup {
+    gap: 0.45rem;
+  }
+
+  .brand-emblem {
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+
+  .brand-emblem svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .brand-title {
+    font-size: 1rem;
+  }
+
+  .btn-mobile-call {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.78rem;
+    gap: 0.4rem;
+    border-radius: 9px;
+  }
+}
+
+/* ---------- very small phones (< 360px) ---------- */
+@media (max-width: 359.98px) {
+  .hero-metrics {
+    gap: 0.35rem;
+  }
+
+  .metric-pill strong {
+    font-size: 1.05rem;
+  }
+
+  .metric-pill span {
+    font-size: 0.75rem;
+  }
+
+  .bottom-nav-item,
+  .bottom-nav-trigger {
+    font-size: 0.66rem;
+  }
+
+  .sheet-links-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* ---------- short landscape screens (phones turned sideways) ---------- */
+@media (max-height: 520px) and (orientation: landscape) {
+  .lightbox-dialog {
+    max-height: 96vh;
+    padding: 0.5rem 0.85rem;
+    gap: 0.4rem;
+  }
+
+  .lightbox-img-frame {
+    max-height: 56vh;
+  }
+
+  .lightbox-img-frame img {
+    max-height: 50vh;
+  }
+
+  .lightbox-footer h3 {
+    font-size: 0.9rem;
+  }
+
+  .lightbox-footer .btn-sultan-primary {
+    padding: 0.35rem 0.8rem;
+  }
+
+  .mobile-bottom-sheet {
+    max-height: 90vh;
+  }
+}
+
+/* modern mobile browsers: use the dynamic viewport so toolbars do not cut content */
+@supports (height: 100dvh) {
+  .lightbox-dialog {
+    max-height: 92dvh;
+  }
+
+  .mobile-bottom-sheet {
+    max-height: 82dvh;
   }
 }
 
